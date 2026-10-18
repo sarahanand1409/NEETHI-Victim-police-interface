@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Neethii — Tamil Nadu Citizen Complaint &amp; Case Portal (Concept)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Tamil:wght@500;700&family=Noto+Sans+Tamil:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#7C2320;
+    --maroon-dark:#5A1917;
+    --gold:#B7862C;
+    --gold-light:#D8AC5E;
+    --paper:#FAF6EE;
+    --paper-2:#F1EADA;
+    --ink:#241C16;
+    --ink-soft:#5B5147;
+    --line:#DFD4BC;
+    --teal:#2E6A5B;
+    --amber:#A65A1E;
+    --red:#9C2B26;
+    --card-bg:#FFFFFF;
+    --header-fg:#FAF6EE;
+    color-scheme: light;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1B1712;
+      --paper-2:#221D16;
+      --ink:#F1E9DA;
+      --ink-soft:#C9BEA9;
+      --line:#3A3226;
+      --card-bg:#241F18;
+      --header-fg:#FAF6EE;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1B1712;
+    --paper-2:#221D16;
+    --ink:#F1E9DA;
+    --ink-soft:#C9BEA9;
+    --line:#3A3226;
+    --card-bg:#241F18;
+    --header-fg:#FAF6EE;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Public Sans", system-ui, -apple-system, sans-serif;
+    line-height:1.55;
+    min-height:100%;
+  }
+  .tamil{font-family:"Noto Sans Tamil","Public Sans",sans-serif;}
+  h1,h2,h3,.headline{
+    font-family:"Source Serif 4", Georgia, serif;
+    font-weight:700;
+    color:var(--ink);
+    margin:0;
+  }
+  .tamil-headline{font-family:"Noto Serif Tamil","Source Serif 4",serif;}
+
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- Emergency strip ---------- */
+  .emergency{
+    background:var(--maroon-dark);
+    color:var(--header-fg);
+    font-size:0.86rem;
+    padding:0.5rem 1rem;
+    text-align:center;
+    padding-top:calc(0.5rem + env(safe-area-inset-top,0px));
+  }
+  .emergency strong{color:var(--gold-light);}
+
+  /* ---------- Header / Nav ---------- */
+  header.site{
+    background:var(--maroon);
+    color:var(--header-fg);
+    position:sticky;
+    top:0;
+    z-index:40;
+    border-bottom:3px solid var(--gold);
+  }
+  .site-inner{
+    max-width:1120px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.85rem 1.25rem;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:0.7rem;}
+  .seal{
+    width:42px;height:42px;flex:none;
+    border-radius:50%;
+    border:2px solid var(--gold-light);
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 35% 30%, #8E2C28, var(--maroon-dark));
+  }
+  .seal svg{width:24px;height:24px;}
+  .brand-text .en{font-family:"Source Serif 4",serif;font-weight:700;font-size:1.18rem;letter-spacing:0.2px;}
+  .brand-text .ta{font-family:"Noto Serif Tamil",serif;font-size:0.95rem;color:var(--gold-light);}
+
+  nav.tabs{
+    display:flex;
+    gap:0.25rem;
+    flex-wrap:wrap;
+  }
+  nav.tabs button{
+    background:transparent;
+    border:1px solid transparent;
+    color:var(--header-fg);
+    opacity:0.85;
+    padding:0.5rem 0.8rem;
+    font-size:0.88rem;
+    font-weight:600;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background 0.15s, opacity 0.15s;
+  }
+  nav.tabs button:hover{opacity:1;background:rgba(250,246,238,0.08);}
+  nav.tabs button.active{
+    background:var(--paper);
+    color:var(--maroon-dark);
+    opacity:1;
+  }
+  nav.tabs button:focus-visible, .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .chip:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:2px;
+  }
+
+  .lang-btn{
+    border:1px solid var(--gold-light) !important;
+    color:var(--header-fg) !important;
+    background:transparent !important;
+    flex:none;
+  }
+  .lang-btn:hover{background:rgba(250,246,238,0.1) !important;}
+
+  main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+  section.view{display:none;}
+  section.view.active{display:block;animation:fade 0.25s ease;}
+  @media (prefers-reduced-motion: reduce){ section.view.active{animation:none;} }
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:2.5rem;
+    align-items:center;
+    padding:1.5rem 0 3rem;
+    border-bottom:1px solid var(--line);
+  }
+  @media (max-width:860px){ .hero{grid-template-columns:1fr;} }
+  .hero .eyebrow-ta{font-family:"Noto Serif Tamil",serif;color:var(--maroon);font-size:1.05rem;margin-bottom:0.4rem;}
+  .hero h1{font-size:clamp(2rem,4.2vw,2.9rem);line-height:1.12;max-width:16ch;}
+  .hero p.lede{color:var(--ink-soft);font-size:1.08rem;max-width:52ch;margin-top:1rem;}
+  .hero-actions{display:flex;gap:0.8rem;margin-top:1.6rem;flex-wrap:wrap;}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:0.5rem;
+    padding:0.72rem 1.3rem;
+    border-radius:4px;
+    border:1px solid var(--maroon);
+    background:var(--maroon);
+    color:#fff;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .btn:hover{background:var(--maroon-dark);}
+  .btn.secondary{background:transparent;color:var(--maroon);}
+  .btn.secondary:hover{background:var(--paper-2);}
+  .btn.small{padding:0.4rem 0.8rem;font-size:0.83rem;}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+  .hero-panel{
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:1.4rem;
+  }
+  .hero-panel h3{font-size:1rem;margin-bottom:0.9rem;}
+  .flow-step{display:flex;gap:0.7rem;padding:0.55rem 0;border-top:1px solid var(--line);}
+  .flow-step:first-of-type{border-top:none;}
+  .flow-num{
+    width:24px;height:24px;flex:none;border-radius:50%;
+    background:var(--paper-2);border:1px solid var(--gold);
+    color:var(--maroon);font-weight:700;font-size:0.78rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .flow-step p{margin:0;font-size:0.88rem;color:var(--ink-soft);}
+  .flow-step b{display:block;font-size:0.92rem;color:var(--ink);font-weight:600;}
+
+  /* ---------- Cards / sections ---------- */
+  .section-head{margin-bottom:1.6rem;}
+  .section-head .kicker{color:var(--maroon);font-family:"Noto Serif Tamil",serif;font-size:1rem;display:block;margin-bottom:0.25rem;}
+  .section-head h2{font-size:1.6rem;}
+  .section-head p{color:var(--ink-soft);max-width:60ch;margin-top:0.5rem;}
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:1.5rem;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+  @media (max-width:700px){.grid-2{grid-template-columns:1fr;}}
+
+  label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:0.35rem;color:var(--ink);}
+  .hint{font-size:0.78rem;color:var(--ink-soft);margin-top:0.3rem;}
+  input[type=text], input[type=tel], select, textarea{
+    width:100%;
+    padding:0.62rem 0.75rem;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:var(--paper);
+    color:var(--ink);
+    font-size:0.95rem;
+    font-family:inherit;
+  }
+  textarea{resize:vertical;min-height:110px;}
+  .field{margin-bottom:1.1rem;}
+  fieldset{border:none;padding:0;margin:0 0 1.1rem;}
+  .checkline{display:flex;gap:0.6rem;align-items:flex-start;font-size:0.88rem;color:var(--ink-soft);}
+  .checkline input{margin-top:0.25rem;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:0.5rem;}
+  .chip{
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    padding:0.45rem 0.85rem;
+    border-radius:999px;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .chip.selected{background:var(--maroon);border-color:var(--maroon);color:#fff;}
+
+  .notice{
+    border-left:3px solid var(--gold);
+    background:var(--paper-2);
+    padding:0.85rem 1rem;
+    border-radius:4px;
+    font-size:0.86rem;
+    color:var(--ink-soft);
+  }
+  .notice.warn{border-left-color:var(--amber);}
+  .notice.danger{border-left-color:var(--red);}
+
+  .law-box{
+    margin-top:0.9rem;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:0.9rem 1rem;
+    background:var(--paper-2);
+  }
+  .law-box h4{font-size:0.85rem;margin:0 0 0.5rem;color:var(--ink);}
+  .law-row{
+    display:flex;
+    gap:0.6rem;
+    align-items:baseline;
+    font-size:0.85rem;
+    padding:0.28rem 0;
+  }
+  .law-tag{
+    flex:none;
+    font-family:"Source Serif 4",serif;
+    font-weight:700;
+    font-size:0.78rem;
+    color:var(--maroon);
+    background:#fff;
+    border:1px solid var(--gold);
+    border-radius:4px;
+    padding:0.05rem 0.45rem;
+    white-space:nowrap;
+  }
+  .law-disclaimer{font-size:0.76rem;color:var(--ink-soft);margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed var(--line);}
+
+  /* Status pill */
+  .pill{
+    display:inline-flex;align-items:center;gap:0.4rem;
+    padding:0.28rem 0.7rem;
+    border-radius:999px;
+    font-size:0.78rem;
+    font-weight:600;
+    border:1px solid transparent;
+  }
+  .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+  .pill.pending{background:#FBEFDB;color:var(--amber);}
+  .pill.assigned{background:#E7EEF6;color:#31557A;}
+  .pill.investigation{background:#EDE7F6;color:#5B3F91;}
+  .pill.resolved{background:#E4F1EA;color:var(--teal);}
+  .pill.case{background:#F7E4E2;color:var(--red);}
+  :root[data-theme="dark"] .pill{filter:brightness(1.3);}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .pill{filter:brightness(1.3);} }
+
+  /* Complaint list / cards */
+  .complaint{
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:1.1rem 1.2rem;
+    background:var(--card-bg);
+    margin-bottom:1rem;
+  }
+  .complaint-top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:0.6rem;}
+  .complaint-id{font-family:"Source Serif 4",serif;font-weight:700;font-size:1.02rem;}
+  .complaint-meta{font-size:0.82rem;color:var(--ink-soft);margin-top:0.2rem;}
+  .timeline{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.8rem;}
+  .tl-step{font-size:0.75rem;padding:0.3rem 0.6rem;border-radius:4px;background:var(--paper-2);color:var(--ink-soft);}
+  .tl-step.done{background:var(--teal);color:#fff;}
+
+  .empty{
+    text-align:center;
+    padding:3rem 1rem;
+    color:var(--ink-soft);
+    border:1px dashed var(--line);
+    border-radius:6px;
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:0.86rem;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;}
+  th,td{text-align:left;padding:0.65rem 0.8rem;border-bottom:1px solid var(--line);white-space:nowrap;}
+  th{background:var(--paper-2);font-weight:600;}
+  tr:last-child td{border-bottom:none;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:2rem 1.25rem calc(2rem + env(safe-area-inset-bottom,0px));
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.8rem;
+  }
+  footer a{color:var(--maroon);text-decoration:underline;}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));
+    transform:translate(-50%,120%);
+    background:var(--ink);color:var(--paper);
+    padding:0.8rem 1.3rem;border-radius:6px;
+    font-size:0.88rem;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+    transition:transform 0.25s ease;
+    z-index:60;
+    max-width:90vw;
+  }
+  .toast.show{transform:translate(-50%,0);}
+
+  /* ---------- Chatbot ---------- */
+  .chat-fab{
+    position:fixed;
+    right:calc(1.2rem + env(safe-area-inset-right,0px));
+    bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));
+    z-index:50;
+    display:flex;align-items:center;gap:0.5rem;
+    background:var(--maroon);
+    color:#fff;
+    border:1px solid var(--gold);
+    border-radius:999px;
+    padding:0.75rem 1.1rem;
+    font-weight:600;
+    font-size:0.9rem;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.22);
+  }
+  .chat-fab:hover{background:var(--maroon-dark);}
+
+  .chat-panel{
+    position:fixed;
+    right:calc(1.2rem + env(safe-area-inset-right,0px));
+    bottom:calc(5.2rem + env(safe-area-inset-bottom,0px));
+    z-index:55;
+    width:min(380px, calc(100vw - 2.4rem));
+    height:min(560px, calc(100vh - 8rem));
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:0 16px 40px rgba(0,0,0,0.28);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(12px) scale(0.98);
+    pointer-events:none;
+    transition:opacity 0.18s ease, transform 0.18s ease;
+  }
+  .chat-panel.open{opacity:1;transform:none;pointer-events:auto;}
+  @media (prefers-reduced-motion: reduce){ .chat-panel{transition:none;} }
+
+  .chat-head{
+    background:var(--maroon);
+    color:#fff;
+    padding:0.9rem 1rem;
+    display:flex;align-items:flex-start;justify-content:space-between;
+    border-bottom:3px solid var(--gold);
+  }
+  .chat-head-title{font-family:"Source Serif 4",serif;font-weight:700;font-size:1.05rem;}
+  .chat-head-sub{font-size:0.78rem;opacity:0.85;margin-top:0.15rem;}
+  .chat-close{background:none;border:none;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 0.2rem;}
+
+  .chat-body{
+    flex:1;
+    overflow-y:auto;
+    padding:1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.65rem;
+    background:var(--paper);
+  }
+  .msg{
+    max-width:86%;
+    padding:0.6rem 0.85rem;
+    border-radius:10px;
+    font-size:0.87rem;
+    line-height:1.45;
+  }
+  .msg.bot{
+    align-self:flex-start;
+    background:var(--paper-2);
+    color:var(--ink);
+    border-bottom-left-radius:2px;
+  }
+  .msg.user{
+    align-self:flex-end;
+    background:var(--maroon);
+    color:#fff;
+    border-bottom-right-radius:2px;
+  }
+  .msg.typing{display:flex;gap:0.25rem;align-items:center;padding:0.7rem 0.9rem;}
+  .msg.typing span{width:6px;height:6px;border-radius:50%;background:var(--ink-soft);opacity:0.6;animation:blink 1.1s infinite ease-in-out;}
+  .msg.typing span:nth-child(2){animation-delay:0.15s;}
+  .msg.typing span:nth-child(3){animation-delay:0.3s;}
+  @keyframes blink{0%,80%,100%{opacity:0.25;}40%{opacity:0.8;}}
+  @media (prefers-reduced-motion: reduce){ .msg.typing span{animation:none;opacity:0.6;} }
+
+  .msg-actions{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.55rem;}
+  .msg-actions button{
+    border:1px solid var(--maroon);
+    background:#fff;
+    color:var(--maroon);
+    padding:0.35rem 0.7rem;
+    border-radius:999px;
+    font-size:0.78rem;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .msg-actions button:hover{background:var(--paper-2);}
+
+  .chat-input-row{
+    display:flex;
+    gap:0.5rem;
+    padding:0.8rem;
+    border-top:1px solid var(--line);
+    background:var(--card-bg);
+  }
+  .chat-input-row input{flex:1;padding:0.55rem 0.7rem;font-size:0.87rem;}
+</style>
+</head>
+<body>
+
+<div class="emergency" data-i18n="emergency_bar">
+  In a real emergency, call <strong>100</strong> (Police) · <strong>181</strong> (Women Helpline) · <strong>1930</strong> (Cybercrime) — this site is a design concept and is not connected to Tamil Nadu Police.
+</div>
+
+<header class="site">
+  <div class="site-inner">
+    <div class="brand">
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 4.6L19 7.3l-3.5 3.4.8 4.9L12 13.4 7.7 15.6l.8-4.9L5 7.3l4.8-.7L12 2z" fill="#D8AC5E"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="en">Neethii</div>
+        <div class="ta">நீதி · Design Concept</div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-view="home" data-i18n="nav_home" class="active">Home</button>
+      <button data-view="file" data-i18n="nav_file">File a Complaint</button>
+      <button data-view="track" data-i18n="nav_track">Track / My Complaints</button>
+      <button data-view="dashboard" data-i18n="nav_dashboard">Dashboard</button>
+      <button data-view="officer" data-i18n="nav_officer">Officer Console</button>
+      <button data-view="about" data-i18n="nav_about">About &amp; Safety</button>
+    </nav>
+    <button class="btn small secondary lang-btn" id="langToggle" type="button" aria-label="Switch language">தமிழ்</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <div>
+        <span class="eyebrow-ta tamil-headline">நீதிக்கான முதல் படி</span>
+        <h1 data-i18n="hero_h1">A calmer first step for reporting a problem, before you have to walk into a station.</h1>
+        <p class="lede" data-i18n="hero_lede">File what happened in your own words. It reaches the police station nearest to your area, an officer picks it up, and you can watch the status change — from a quiet complaint to a formal case, if it needs to go that far.</p>
+        <div class="hero-actions">
+          <button class="btn" data-goto="file" data-i18n="hero_cta1">File a complaint</button>
+          <button class="btn secondary" data-goto="track" data-i18n="hero_cta2">Track a complaint</button>
+          <button class="btn secondary" id="heroChatBtn" type="button" data-i18n="hero_cta3">Describe it to Neethii instead</button>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h3 data-i18n="how_title">How it works</h3>
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <p><b data-i18n="how_1_t">You describe the problem</b><span data-i18n="how_1_d">Give your area and what happened — no visit required to start. Neethii can help you put it into words.</span></p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <p><b data-i18n="how_2_t">It's routed to your nearest station</b><span data-i18n="how_2_d">Matched to a police station by your district and taluk.</span></p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <p><b data-i18n="how_3_t">An officer takes charge</b><span data-i18n="how_3_d">Status moves from Pending to Assigned to Under Investigation.</span></p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <p><b data-i18n="how_4_t">Serious matters become a case</b><span data-i18n="how_4_d">Escalated complaints get a case number tied to your record, for the long term.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:2.5rem;">
+      <span class="kicker tamil-headline">இது என்ன, இது என்ன இல்லை</span>
+      <h2 data-i18n="whatis_h2">What this is, and what it isn't</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:0.5rem;" data-i18n="whatis_1_t">This is a working design concept</h3>
+        <p style="color:var(--ink-soft);font-size:0.92rem;" data-i18n="whatis_1_d">Every screen — filing, routing, officer status changes, case escalation, even chatting with Neethii — actually runs, so you can click through the full idea end to end. Data you enter is saved only in this browser, on your device.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:0.5rem;" data-i18n="whatis_2_t">This is not the real Tamil Nadu Police</h3>
+        <p style="color:var(--ink-soft);font-size:0.92rem;" data-i18n="whatis_2_d">Nothing here reaches an actual station, an actual officer, or Aadhaar's real database. A real version of this would need to be built and operated by the Tamil Nadu Police department itself, with proper identity verification and legal safeguards.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FILE COMPLAINT ============ -->
+  <section class="view" id="view-file">
+    <div class="section-head">
+      <span class="kicker tamil-headline">புகார் அளிக்க</span>
+      <h2 data-i18n="file_h2">File a complaint</h2>
+      <p data-i18n="file_lede">This starts as a complaint. If you or the system flags it as serious, it can be escalated into a formal case further down this form.</p>
+    </div>
+
+    <div class="notice" id="chatPrefillNotice" style="display:none;margin-bottom:1.2rem;">
+      Filled in from your chat with Neethii — check it over before sending.
+    </div>
+
+    <form id="complaintForm" class="card" novalidate>
+      <div class="grid-2">
+        <div class="field">
+          <label for="f-name">Full name</label>
+          <input type="text" id="f-name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone number</label>
+          <input type="tel" id="f-phone" placeholder="10-digit mobile number" required pattern="[0-9]{10}" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="f-aadhaar">Aadhaar number</label>
+          <input type="text" id="f-aadhaar" placeholder="XXXX XXXX XXXX" required inputmode="numeric" maxlength="14">
+          <p class="hint">Used only to link this record to you for life, the way a real case file would be. Only the last 4 digits are ever shown or stored here.</p>
+        </div>
+        <div class="field">
+          <label for="f-district">District</label>
+          <select id="f-district" required></select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-area">Taluk / area, town or village</label>
+        <input type="text" id="f-area" placeholder="e.g. Ganapathy, Coimbatore North" required>
+      </div>
+
+      <div class="field">
+        <label>What kind of problem is this?</label>
+        <div class="chips" id="categoryChips" role="group" aria-label="Complaint category"></div>
+        <div id="lawInfo" style="display:none;"></div>
+      </div>
+
+      <div class="field">
+        <label for="f-desc">Describe what happened</label>
+        <textarea id="f-desc" placeholder="Write in your own words — when it happened, who was involved, and anything else that matters." required></textarea>
+        <p class="hint" id="descHint"></p>
+      </div>
+
+      <fieldset id="escalateBlock" style="display:none;">
+        <div class="notice warn" style="margin-bottom:0.8rem;">
+          Based on the category, this may be serious enough to go beyond a station-level complaint. You can choose to file it directly as a case.
+        </div>
+        <label class="checkline">
+          <input type="checkbox" id="f-escalate">
+          <span>File this as a formal case from the start. It will be given a case number and prepared for court proceedings, permanently linked to my Aadhaar record.</span>
+        </label>
+      </fieldset>
+
+      <div class="field">
+        <label class="checkline">
+          <input type="checkbox" id="f-anonymous">
+          <span>Keep my name off this record in the officer's queue — it stays "Anonymous complainant" there. It's still tied to my Aadhaar internally, so it still becomes my lifetime record.</span>
+        </label>
+        <label class="checkline" style="margin-top:0.6rem;">
+          <input type="checkbox" id="f-notify" checked>
+          <span>Notify me on my phone number above whenever the status changes.</span>
+        </label>
+      </div>
+
+      <div class="notice" style="margin-bottom:1.2rem;">
+        By submitting, you're stating that this account is true to the best of your knowledge. Knowingly filing a false complaint is itself an offence under Indian law.
+      </div>
+
+      <button type="submit" class="btn" data-i18n="file_submit">Submit complaint</button>
+    </form>
+  </section>
+
+  <!-- ============ TRACK ============ -->
+  <section class="view" id="view-track">
+    <div class="section-head">
+      <span class="kicker tamil-headline">நிலையைப் பார்க்க</span>
+      <h2 data-i18n="track_h2">Track / my complaints</h2>
+      <p data-i18n="track_lede">Complaints filed in this browser appear below. In a real deployment, this would be locked behind your verified login.</p>
+    </div>
+    <div class="field" style="max-width:420px;">
+      <label for="trackSearch" data-i18n="track_search_label">Jump to a complaint or case number</label>
+      <input type="text" id="trackSearch" placeholder="e.g. TN/CMP/2026/CHE/0001">
+    </div>
+    <div id="trackList"></div>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="view-dashboard">
+    <div class="section-head">
+      <span class="kicker tamil-headline">பொது புள்ளிவிவரம்</span>
+      <h2 data-i18n="dash_h2">Public dashboard</h2>
+      <p data-i18n="dash_lede">An anonymised, running count of everything filed in this browser's demo data — the kind of transparency page a real deployment could publish district-wide.</p>
+    </div>
+    <div class="grid-2" id="dashStatCards" style="margin-bottom:1.5rem;"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:1rem;margin-bottom:1rem;" data-i18n="dash_by_category">By category</h3>
+        <div id="dashByCategory"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1rem;margin-bottom:1rem;" data-i18n="dash_by_district">By district</h3>
+        <div id="dashByDistrict"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICER CONSOLE ============ -->
+  <section class="view" id="view-officer">
+    <div class="section-head">
+      <span class="kicker tamil-headline">அலுவலர் பணியிடம்</span>
+      <h2 data-i18n="officer_h2">Officer console (demo)</h2>
+      <p data-i18n="officer_lede">This stands in for the station-side view — the queue an assigned officer would work through. In the real system this would sit behind an officer login, not be open to the public.</p>
+    </div>
+    <div id="officerList"></div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="view" id="view-about">
+    <div class="section-head">
+      <span class="kicker tamil-headline">பாதுகாப்பு குறிப்பு</span>
+      <h2 data-i18n="about_h2">About this concept, and where to get real help</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:1.2rem;">
+      <h3 style="font-size:1.05rem;margin-bottom:0.6rem;" data-i18n="about_1_t">Why this kind of portal is worth designing</h3>
+      <p style="color:var(--ink-soft);" data-i18n="about_1_d">Plenty of people hesitate before walking into a police station — out of fear, distance, or simply not knowing how a complaint becomes a case. A well-run digital front door, run by the police department itself with real verification, could lower that first barrier while still routing serious matters to a human officer quickly.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1.2rem;">
+      <h3 style="font-size:1.05rem;margin-bottom:0.6rem;" data-i18n="about_2_t">What a real version would need, that this demo doesn't have</h3>
+      <ul style="color:var(--ink-soft);font-size:0.93rem;padding-left:1.2rem;">
+        <li>Operation by Tamil Nadu Police or an authorised government body — not a third party.</li>
+        <li>Aadhaar verification through UIDAI's own authorised process, not a text field.</li>
+        <li>A live link into the real police station and court case-management systems.</li>
+        <li>Legal safeguards: how false complaints are handled, how evidence is preserved, how a citizen appeals a decision.</li>
+        <li>Data protection matching India's Digital Personal Data Protection Act.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-bottom:1.2rem;">
+      <h3 style="font-size:1.05rem;margin-bottom:0.9rem;" data-i18n="about_3_t">Real helpline numbers, worth saving</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th data-i18n="help_col_service">Service</th><th data-i18n="help_col_number">Number</th></tr></thead>
+          <tbody>
+            <tr><td data-i18n="help_police">Police</td><td>100</td></tr>
+            <tr><td data-i18n="help_women">Women's helpline</td><td>181</td></tr>
+            <tr><td data-i18n="help_child">Child helpline</td><td>1098</td></tr>
+            <tr><td data-i18n="help_cyber">Cybercrime / online fraud</td><td>1930</td></tr>
+            <tr><td data-i18n="help_senior">Senior citizen helpline</td><td>1253</td></tr>
+            <tr><td data-i18n="help_ambulance">Ambulance</td><td>108</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="notice danger">
+      <strong data-i18n="about_danger_lead">If you're dealing with a real, current problem:</strong>
+      <span data-i18n="about_danger_body">please contact the police directly — dial <strong>100</strong>, or for women's safety <strong>181</strong>, or for cybercrime and online fraud <strong>1930</strong> /</span>
+      <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>.
+      <span data-i18n="about_danger_body2">You can also visit or call your nearest police station, or use Tamil Nadu Police's own e-services at</span>
+      <a href="https://eservices.tnpolice.gov.in" target="_blank" rel="noopener">eservices.tnpolice.gov.in</a>.
+    </div>
+  </section>
+
+</main>
+
+<footer data-i18n="footer_text">
+  Neethii is an unofficial design concept created for demonstration purposes. It is not affiliated with, endorsed by, or connected to the Government of Tamil Nadu or Tamil Nadu Police. Data entered here stays in this browser only.
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ CHATBOT ============ -->
+<button class="chat-fab" id="chatFab" type="button" aria-label="Open chat with Neethii">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
+  <span data-i18n="chat_fab">Ask Neethii</span>
+</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Chat with Neethii" aria-hidden="true">
+  <div class="chat-head">
+    <div>
+      <div class="chat-head-title" data-i18n="chat_title">Ask Neethii</div>
+      <div class="chat-head-sub" data-i18n="chat_subtitle">Tell it what happened — it'll suggest where this fits</div>
+    </div>
+    <button class="chat-close" id="chatClose" type="button" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <form class="chat-input-row" id="chatForm">
+    <input type="text" id="chatInput" data-i18n-ph="chat_placeholder" placeholder="Describe your problem in your own words…" autocomplete="off">
+    <button type="submit" class="btn small" data-i18n="chat_send">Send</button>
+  </form>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var DISTRICTS = ["Chennai","Coimbatore","Madurai","Tiruchirappalli","Salem","Tirunelveli","Erode","Vellore","Thoothukudi","Dindigul",
+    "Thanjavur","Kanchipuram","Tiruppur","Tiruvallur","Cuddalore","Nagapattinam","Kanyakumari","Namakkal","Karur","Sivaganga",
+    "Virudhunagar","Ramanathapuram","Theni","Pudukkottai","Nilgiris","Ariyalur","Perambalur","Dharmapuri","Krishnagiri","Villupuram",
+    "Tiruvannamalai","Tenkasi","Mayiladuthurai","Ranipet","Tirupathur","Chengalpattu","Kallakurichi"];
+
+  var CATEGORIES = [
+    {id:"theft", label:"Theft / burglary", serious:false,
+      keywords:["stole","stolen","theft","robbed","robbery","burglary","snatched","broke into","pickpocket","missing wallet","missing bike","missing vehicle"],
+      sections:[
+        {law:"BNS", code:"303", title:"Theft"},
+        {law:"BNS", code:"304", title:"Snatching"},
+        {law:"BNS", code:"305", title:"Theft in a dwelling house, vehicle or place of worship"}
+      ]},
+    {id:"cyber", label:"Cybercrime / online fraud", serious:false,
+      keywords:["online","fraud","otp","bank account","hacked","phishing","upi","scam call","fake link","lottery","loan app","debited","cyber"],
+      sections:[
+        {law:"IT Act", code:"66C", title:"Identity theft"},
+        {law:"IT Act", code:"66D", title:"Cheating by personation using a computer resource"},
+        {law:"BNS", code:"318", title:"Cheating"}
+      ]},
+    {id:"harassment", label:"Harassment / stalking", serious:true,
+      keywords:["harass","stalk","following me","threat","threatening","abusive messages","blackmail","eve teasing"],
+      sections:[
+        {law:"BNS", code:"78", title:"Stalking"},
+        {law:"BNS", code:"351", title:"Criminal intimidation"}
+      ]},
+    {id:"domestic", label:"Domestic violence", serious:true,
+      keywords:["husband","wife","beats me","beating","domestic","family violence","in-laws","dowry","abuse at home"],
+      sections:[
+        {law:"BNS", code:"85", title:"Cruelty by husband or his relatives"},
+        {law:"BNS", code:"86", title:"Definition of \u2018cruelty\u2019 for Section 85"},
+        {law:"Civil remedy", code:"PWDVA, 2005", title:"Protection orders under the Protection of Women from Domestic Violence Act"}
+      ]},
+    {id:"assault", label:"Assault", serious:true,
+      keywords:["hit me","assault","beaten","attacked","injured","fight","wound","punched"],
+      sections:[
+        {law:"BNS", code:"115", title:"Voluntarily causing hurt"},
+        {law:"BNS", code:"117", title:"Voluntarily causing grievous hurt"},
+        {law:"BNS", code:"118", title:"Hurt or grievous hurt by dangerous weapons or means"}
+      ]},
+    {id:"property", label:"Property / land dispute", serious:false,
+      keywords:["land","property","encroach","boundary","tenant","landlord","rent dispute","deed"],
+      sections:[
+        {law:"BNS", code:"329", title:"Criminal trespass / house-trespass"}
+      ],
+      sectionsNote:"Most land and property disputes are civil matters (a title or possession suit), not criminal ones. A criminal section like this only comes in if there was trespass, force, or threats involved."},
+    {id:"missing", label:"Missing person", serious:true,
+      keywords:["missing","not come back","disappeared","can't find","hasn't returned","went missing"],
+      sections:[
+        {law:"BNS", code:"137", title:"Kidnapping"}
+      ],
+      sectionsNote:"A missing person is normally first registered as a Missing Person Report, no offence needed. Section 137 only becomes relevant if there's reason to suspect kidnapping or abduction."},
+    {id:"other", label:"Other", serious:false, keywords:[], sections:[]}
+  ];
+
+  var STAGES = ["Filed","Assigned to officer","Under investigation","Resolved"];
+  var CASE_STAGES = ["Filed as case","Assigned to officer","Under investigation","Escalated to court","Case ongoing"];
+
+  var STORE_KEY = "neethii_complaints_v1";
+  var SEQ_KEY = "neethii_seq_v1";
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function save(list){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(list)); }catch(e){}
+  }
+  function nextSeq(){
+    var n = 1;
+    try{
+      n = parseInt(localStorage.getItem(SEQ_KEY) || "0", 10) + 1;
+      localStorage.setItem(SEQ_KEY, String(n));
+    }catch(e){}
+    return n;
+  }
+
+  var complaints = load();
+  var selectedCategory = null;
+
+  // ---------- Nav ----------
+  var tabButtons = document.querySelectorAll("#tabs button");
+  var views = document.querySelectorAll("section.view");
+  function goto(name){
+    tabButtons.forEach(function(b){ b.classList.toggle("active", b.dataset.view === name); });
+    views.forEach(function(v){ v.classList.toggle("active", v.id === "view-" + name); });
+    if(name === "track") renderTrack();
+    if(name === "officer") renderOfficer();
+    if(name === "dashboard") renderDashboard();
+    window.scrollTo({top:0, behavior:"reduce"});
+  }
+  tabButtons.forEach(function(b){ b.addEventListener("click", function(){ goto(b.dataset.view); }); });
+  document.querySelectorAll("[data-goto]").forEach(function(b){
+    b.addEventListener("click", function(){ goto(b.dataset.goto); });
+  });
+
+  // ---------- Language toggle ----------
+  var I18N = {
+    en: {
+      nav_home:"Home", nav_file:"File a Complaint", nav_track:"Track / My Complaints",
+      nav_dashboard:"Dashboard", nav_officer:"Officer Console", nav_about:"About & Safety",
+      emergency_bar:'In a real emergency, call <strong>100</strong> (Police) · <strong>181</strong> (Women Helpline) · <strong>1930</strong> (Cybercrime) — this site is a design concept and is not connected to Tamil Nadu Police.',
+      hero_h1:"A calmer first step for reporting a problem, before you have to walk into a station.",
+      hero_lede:"File what happened in your own words. It reaches the police station nearest to your area, an officer picks it up, and you can watch the status change — from a quiet complaint to a formal case, if it needs to go that far.",
+      hero_cta1:"File a complaint", hero_cta2:"Track a complaint", hero_cta3:"Describe it to Neethii instead",
+      how_title:"How it works",
+      how_1_t:"You describe the problem", how_1_d:"Give your area and what happened — no visit required to start. Neethii can help you put it into words.",
+      how_2_t:"It's routed to your nearest station", how_2_d:"Matched to a police station by your district and taluk.",
+      how_3_t:"An officer takes charge", how_3_d:"Status moves from Pending to Assigned to Under Investigation.",
+      how_4_t:"Serious matters become a case", how_4_d:"Escalated complaints get a case number tied to your record, for the long term.",
+      whatis_h2:"What this is, and what it isn't",
+      whatis_1_t:"This is a working design concept",
+      whatis_1_d:"Every screen — filing, routing, officer status changes, case escalation, even chatting with Neethii — actually runs, so you can click through the full idea end to end. Data you enter is saved only in this browser, on your device.",
+      whatis_2_t:"This is not the real Tamil Nadu Police",
+      whatis_2_d:"Nothing here reaches an actual station, an actual officer, or Aadhaar's real database. A real version of this would need to be built and operated by the Tamil Nadu Police department itself, with proper identity verification and legal safeguards.",
+      file_h2:"File a complaint", file_lede:"This starts as a complaint. If you or the system flags it as serious, it can be escalated into a formal case further down this form.",
+      file_submit:"Submit complaint",
+      track_h2:"Track / my complaints", track_lede:"Complaints filed in this browser appear below. In a real deployment, this would be locked behind your verified login.",
+      track_search_label:"Jump to a complaint or case number",
+      dash_h2:"Public dashboard", dash_lede:"An anonymised, running count of everything filed in this browser's demo data — the kind of transparency page a real deployment could publish district-wide.",
+      dash_by_category:"By category", dash_by_district:"By district",
+      officer_h2:"Officer console (demo)", officer_lede:"This stands in for the station-side view — the queue an assigned officer would work through. In the real system this would sit behind an officer login, not be open to the public.",
+      about_h2:"About this concept, and where to get real help",
+      about_1_t:"Why this kind of portal is worth designing",
+      about_1_d:"Plenty of people hesitate before walking into a police station — out of fear, distance, or simply not knowing how a complaint becomes a case. A well-run digital front door, run by the police department itself with real verification, could lower that first barrier while still routing serious matters to a human officer quickly.",
+      about_2_t:"What a real version would need, that this demo doesn't have",
+      about_3_t:"Real helpline numbers, worth saving",
+      help_col_service:"Service", help_col_number:"Number",
+      help_police:"Police", help_women:"Women's helpline", help_child:"Child helpline",
+      help_cyber:"Cybercrime / online fraud", help_senior:"Senior citizen helpline", help_ambulance:"Ambulance",
+      about_danger_lead:"If you're dealing with a real, current problem:",
+      about_danger_body:"please contact the police directly — dial <strong>100</strong>, or for women's safety <strong>181</strong>, or for cybercrime and online fraud <strong>1930</strong> /",
+      about_danger_body2:"You can also visit or call your nearest police station, or use Tamil Nadu Police's own e-services at",
+      footer_text:"Neethii is an unofficial design concept created for demonstration purposes. It is not affiliated with, endorsed by, or connected to the Government of Tamil Nadu or Tamil Nadu Police. Data entered here stays in this browser only.",
+      chat_fab:"Ask Neethii", chat_title:"Ask Neethii", chat_subtitle:"Tell it what happened — it'll suggest where this fits",
+      chat_placeholder:"Describe your problem in your own words…", chat_send:"Send"
+    },
+    ta: {
+      nav_home:"முகப்பு", nav_file:"புகார் அளிக்க", nav_track:"நிலை / என் புகார்கள்",
+      nav_dashboard:"புள்ளிவிவரம்", nav_officer:"அலுவலர் பணியிடம்", nav_about:"பற்றி & பாதுகாப்பு",
+      emergency_bar:'உண்மையான அவசரநிலையில், அழையுங்கள் <strong>100</strong> (காவல்துறை) · <strong>181</strong> (பெண்கள் உதவி எண்) · <strong>1930</strong> (சைபர் குற்றம்) — இது ஒரு வடிவமைப்பு கருத்து மட்டுமே, தமிழ்நாடு காவல்துறையுடன் இணைக்கப்படவில்லை.',
+      hero_h1:"நிலையத்திற்கு நேரடியாக செல்வதற்கு முன், ஒரு அமைதியான முதல் படி.",
+      hero_lede:"என்ன நடந்தது என்பதை உங்கள் சொந்த வார்த்தைகளில் எழுதுங்கள். இது உங்கள் பகுதிக்கு அருகிலுள்ள காவல் நிலையத்தை சென்றடையும், ஒரு அலுவலர் இதை பொறுப்பேற்பார், தேவைப்பட்டால் இது வழக்காகவும் மாறலாம்.",
+      hero_cta1:"புகார் அளிக்க", hero_cta2:"புகாரின் நிலையைப் பார்க்க", hero_cta3:"நீதியிடம் பேசி சொல்லுங்கள்",
+      how_title:"இது எப்படி வேலை செய்கிறது",
+      how_1_t:"பிரச்சனையை விவரிக்கவும்", how_1_d:"உங்கள் பகுதி மற்றும் என்ன நடந்தது என்பதை தெரிவிக்கவும் — நிலையத்திற்கு நேரடியாக வர வேண்டியதில்லை.",
+      how_2_t:"அருகிலுள்ள நிலையத்திற்கு அனுப்பப்படும்", how_2_d:"உங்கள் மாவட்டம் மற்றும் தாலுகா அடிப்படையில் பொருத்தப்படும்.",
+      how_3_t:"அலுவலர் பொறுப்பேற்பார்", how_3_d:"நிலை நிலுவையில் இருந்து ஒதுக்கப்பட்டது என மாறி, விசாரணையில் உள்ளது என மாறும்.",
+      how_4_t:"பெரிய பிரச்சனைகள் வழக்காக மாறும்", how_4_d:"தீவிரமான புகார்களுக்கு வழக்கு எண் வழங்கப்பட்டு, அது வாழ்நாள் முழுவதும் உங்கள் பதிவில் இணைக்கப்படும்.",
+      whatis_h2:"இது என்ன, இது என்ன இல்லை",
+      whatis_1_t:"இது ஒரு செயல்படும் வடிவமைப்பு கருத்து",
+      whatis_1_d:"புகார் அளிப்பது, அனுப்புவது, நிலை மாற்றம், வழக்காக மாறுவது, நீதியுடன் அரட்டையடிப்பது — அனைத்தும் இங்கே வேலை செய்கின்றன. நீங்கள் உள்ளிடும் தகவல் இந்த உலாவியில் மட்டுமே சேமிக்கப்படும்.",
+      whatis_2_t:"இது உண்மையான தமிழ்நாடு காவல்துறை அல்ல",
+      whatis_2_d:"இங்குள்ள எதுவும் உண்மையான நிலையத்தையோ, அலுவலரையோ, ஆதார் தரவுத்தளத்தையோ சென்றடையாது. உண்மையான பதிப்பு தமிழ்நாடு காவல்துறையால் உருவாக்கப்பட்டு இயக்கப்பட வேண்டும்.",
+      file_h2:"புகார் அளிக்க", file_lede:"இது ஒரு புகாராக தொடங்குகிறது. தீவிரமானது எனில், இதை படிவத்தின் கீழே வழக்காக மாற்றலாம்.",
+      file_submit:"புகாரை சமர்ப்பிக்கவும்",
+      track_h2:"நிலை / என் புகார்கள்", track_lede:"இந்த உலாவியில் அளிக்கப்பட்ட புகார்கள் கீழே காணப்படும்.",
+      track_search_label:"ஒரு புகார்/வழக்கு எண்ணுக்குச் செல்லவும்",
+      dash_h2:"பொது புள்ளிவிவரம்", dash_lede:"இந்த உலாவியின் மாதிரி தரவின் தொகுப்பு எண்ணிக்கை — ஒரு உண்மையான வடிவமைப்பு வெளியிடக்கூடிய வெளிப்படைத்தன்மை பக்கம் போல.",
+      dash_by_category:"வகை வாரியாக", dash_by_district:"மாவட்டம் வாரியாக",
+      officer_h2:"அலுவலர் பணியிடம் (மாதிரி)", officer_lede:"இது நிலைய பக்க பார்வைக்கு பதிலாக உள்ளது — ஒரு அலுவலர் பணிபுரியும் வரிசை. உண்மையான அமைப்பில் இது அலுவலர் உள்நுழைவுக்குப் பின் இருக்கும்.",
+      about_h2:"இந்த கருத்து பற்றி, உண்மையான உதவி எங்கு கிடைக்கும்",
+      about_1_t:"இது போன்ற ஒரு தளம் ஏன் தேவை",
+      about_1_d:"பலர் காவல் நிலையத்திற்குள் செல்ல தயங்குகிறார்கள் — பயம், தூரம் அல்லது எப்படி புகார் வழக்காக மாறுகிறது என்று தெரியாமல். சரியான சரிபார்ப்புடன் கூடிய டிஜிட்டல் நுழைவாயில் இந்த முதல் தடையை குறைக்கலாம்.",
+      about_2_t:"உண்மையான பதிப்புக்கு தேவையானவை, இந்த மாதிரியில் இல்லாதவை",
+      about_3_t:"உண்மையான உதவி எண்கள், சேமித்து வையுங்கள்",
+      help_col_service:"சேவை", help_col_number:"எண்",
+      help_police:"காவல்துறை", help_women:"பெண்கள் உதவி எண்", help_child:"குழந்தைகள் உதவி எண்",
+      help_cyber:"சைபர் குற்றம் / ஆன்லைன் மோசடி", help_senior:"முதியோர் உதவி எண்", help_ambulance:"ஆம்புலன்ஸ்",
+      about_danger_lead:"நீங்கள் ஒரு உண்மையான பிரச்சனையை எதிர்கொண்டால்:",
+      about_danger_body:"தயவுசெய்து நேரடியாக காவல்துறையை தொடர்பு கொள்ளுங்கள் — <strong>100</strong>, பெண்கள் பாதுகாப்புக்கு <strong>181</strong>, சைபர் குற்றத்திற்கு <strong>1930</strong> /",
+      about_danger_body2:"உங்கள் அருகிலுள்ள காவல் நிலையத்தையும் தொடர்பு கொள்ளலாம், அல்லது தமிழ்நாடு காவல்துறையின் சொந்த இ-சேவையைப் பயன்படுத்தலாம்:",
+      footer_text:"நீதி (Neethii) என்பது வெறும் காட்சிப்படுத்தலுக்காக உருவாக்கப்பட்ட ஒரு அதிகாரப்பூர்வமற்ற வடிவமைப்பு கருத்து. இது தமிழ்நாடு அரசு அல்லது தமிழ்நாடு காவல்துறையுடன் தொடர்பு இல்லை. இங்கு உள்ளிடும் தரவு இந்த உலாவியில் மட்டுமே சேமிக்கப்படும்.",
+      chat_fab:"நீதியிடம் கேளுங்கள்", chat_title:"நீதியிடம் கேளுங்கள்", chat_subtitle:"என்ன நடந்தது என்று சொல்லுங்கள் — இது எங்கு பொருந்தும் என்று பரிந்துரைக்கும்",
+      chat_placeholder:"உங்கள் பிரச்சனையை உங்கள் சொந்த வார்த்தைகளில் எழுதுங்கள்…", chat_send:"அனுப்பு"
+    }
+  };
+  var currentLang = "en";
+  function applyLang(lang){
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    var dict = I18N[lang];
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var key = el.getAttribute("data-i18n");
+      if(dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function(el){
+      var key = el.getAttribute("data-i18n-ph");
+      if(dict[key] !== undefined) el.setAttribute("placeholder", dict[key]);
+    });
+    document.getElementById("langToggle").textContent = lang === "en" ? "தமிழ்" : "English";
+  }
+  document.getElementById("langToggle").addEventListener("click", function(){
+    applyLang(currentLang === "en" ? "ta" : "en");
+  });
+
+  // ---------- Populate district + categories ----------
+  var districtSel = document.getElementById("f-district");
+  var placeholder = document.createElement("option");
+  placeholder.textContent = "Select your district";
+  placeholder.value = "";
+  placeholder.disabled = true; placeholder.selected = true;
+  districtSel.appendChild(placeholder);
+  DISTRICTS.forEach(function(d){
+    var o = document.createElement("option");
+    o.value = d; o.textContent = d;
+    districtSel.appendChild(o);
+  });
+
+  var chipWrap = document.getElementById("categoryChips");
+  CATEGORIES.forEach(function(c){
+    var chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.textContent = c.label;
+    chip.dataset.id = c.id;
+    chip.addEventListener("click", function(){
+      selectedCategory = c;
+      Array.from(chipWrap.children).forEach(function(ch){ ch.classList.remove("selected"); });
+      chip.classList.add("selected");
+      var block = document.getElementById("escalateBlock");
+      block.style.display = c.serious ? "block" : "none";
+      if(!c.serious) document.getElementById("f-escalate").checked = false;
+      renderLawInfo(c);
+    });
+    chipWrap.appendChild(chip);
+  });
+
+  function lawBoxHTML(category){
+    if(!category || !category.sections || category.sections.length === 0){
+      return '<div class="law-box"><h4>No single section fits automatically</h4>' +
+        '<p class="hint">This kind of matter usually depends heavily on the specific facts. The officer taking your complaint will identify what, if anything, applies.</p></div>';
+    }
+    var rows = category.sections.map(function(s){
+      return '<div class="law-row"><span class="law-tag">' + s.law + ' ' + s.code + '</span><span>' + esc(s.title) + '</span></div>';
+    }).join("");
+    var note = category.sectionsNote ? '<p class="hint" style="margin-top:0.5rem;">' + esc(category.sectionsNote) + '</p>' : "";
+    return '<div class="law-box"><h4>Sections often cited for this kind of complaint</h4>' + rows + note +
+      '<p class="law-disclaimer">Illustrative only, not legal advice — the officer and, later, the court decide which sections actually apply once they have the facts. BNS is the Bharatiya Nyaya Sanhita, India\u2019s penal code since 1 July 2024, which replaced the old IPC.</p></div>';
+  }
+  function renderLawInfo(category){
+    var box = document.getElementById("lawInfo");
+    box.style.display = "block";
+    box.innerHTML = lawBoxHTML(category);
+  }
+
+  document.getElementById("f-desc").addEventListener("input", function(e){
+    var hint = document.getElementById("descHint");
+    var len = e.target.value.trim().length;
+    hint.textContent = len > 400 ? "A long, detailed account like this often points toward a formal case — consider checking the case option below if it applies." : "";
+  });
+
+  // ---------- Aadhaar formatting ----------
+  document.getElementById("f-aadhaar").addEventListener("input", function(e){
+    var digits = e.target.value.replace(/\D/g,"").slice(0,12);
+    var groups = digits.match(/.{1,4}/g) || [];
+    e.target.value = groups.join(" ");
+  });
+
+  function stationFor(district){
+    return district + " District Police Station — Complaint Cell";
+  }
+
+  function formatId(seq, district, isCase){
+    var year = new Date().getFullYear();
+    var code = (district || "GEN").slice(0,3).toUpperCase();
+    var prefix = isCase ? "TN/CASE" : "TN/CMP";
+    return prefix + "/" + year + "/" + code + "/" + String(seq).padStart(4,"0");
+  }
+
+  // ---------- Submit ----------
+  document.getElementById("complaintForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = document.getElementById("f-name").value.trim();
+    var phone = document.getElementById("f-phone").value.trim();
+    var aadhaar = document.getElementById("f-aadhaar").value.replace(/\D/g,"");
+    var district = document.getElementById("f-district").value;
+    var area = document.getElementById("f-area").value.trim();
+    var desc = document.getElementById("f-desc").value.trim();
+
+    if(!name || !phone || aadhaar.length !== 12 || !district || !area || !selectedCategory || !desc){
+      showToast("Please fill in every field, including a category and a 12-digit Aadhaar number.");
+      return;
+    }
+
+    var escalate = selectedCategory.serious && document.getElementById("f-escalate").checked;
+    var anonymous = document.getElementById("f-anonymous").checked;
+    var notify = document.getElementById("f-notify").checked;
+    var seq = nextSeq();
+    var id = formatId(seq, district, escalate);
+    var now = new Date();
+
+    var record = {
+      id: id,
+      name: name,
+      phone: phone,
+      aadhaarLast4: aadhaar.slice(-4),
+      district: district,
+      area: area,
+      category: selectedCategory.label,
+      categoryId: selectedCategory.id,
+      sections: selectedCategory.sections || [],
+      description: desc,
+      station: stationFor(district),
+      filedAt: now.toISOString(),
+      isCase: escalate,
+      anonymous: anonymous,
+      notify: notify,
+      stageIndex: 0,
+      log: [{ at: now.toISOString(), note: (escalate ? "Case filed by citizen." : "Complaint filed by citizen.") + " Routed to " + stationFor(district) + "." }]
+    };
+
+    complaints.unshift(record);
+    save(complaints);
+
+    document.getElementById("complaintForm").reset();
+    document.getElementById("f-notify").checked = true;
+    selectedCategory = null;
+    Array.from(chipWrap.children).forEach(function(ch){ ch.classList.remove("selected"); });
+    document.getElementById("escalateBlock").style.display = "none";
+    document.getElementById("descHint").textContent = "";
+    document.getElementById("chatPrefillNotice").style.display = "none";
+    document.getElementById("lawInfo").style.display = "none";
+
+    showToast((escalate ? "Case " : "Complaint ") + id + " filed and sent to " + district + " district.");
+    goto("track");
+  });
+
+  // ---------- Rendering: track ----------
+  function pillFor(record){
+    var stages = record.isCase ? CASE_STAGES : STAGES;
+    var label = stages[record.stageIndex];
+    var cls = "pending";
+    if(record.isCase && record.stageIndex >= 3) cls = "case";
+    else if(record.stageIndex === 1) cls = "assigned";
+    else if(record.stageIndex === 2) cls = "investigation";
+    else if(!record.isCase && record.stageIndex === 3) cls = "resolved";
+    else if(record.isCase && record.stageIndex === 4) cls = "resolved";
+    return '<span class="pill ' + cls + '">' + label + '</span>';
+  }
+
+  function timelineFor(record){
+    var stages = record.isCase ? CASE_STAGES : STAGES;
+    return stages.map(function(s, i){
+      return '<span class="tl-step' + (i <= record.stageIndex ? ' done' : '') + '">' + s + '</span>';
+    }).join("");
+  }
+
+  function complaintCardHTML(record, withActions){
+    var date = new Date(record.filedAt).toLocaleDateString("en-IN", {day:"numeric", month:"short", year:"numeric"});
+    var cat = CATEGORIES.find(function(c){ return c.id === record.categoryId; });
+    var priorityBadge = (cat && cat.serious) ? '<span class="pill case" style="margin-left:0.4rem;">Priority</span>' : '';
+    var reporterLine = withActions
+      ? ('<p class="complaint-meta" style="margin-top:0.3rem;">Reporter: ' + (record.anonymous ? 'Anonymous complainant' : esc(record.name)) + (record.notify ? ' · \uD83D\uDD14 SMS updates on' : '') + '</p>')
+      : '';
+    var sectionsLine = (record.sections && record.sections.length)
+      ? ('<p class="complaint-meta" style="margin-top:0.4rem;">Sections on file: ' + record.sections.map(function(s){ return s.law + ' ' + s.code; }).join(', ') + '</p>')
+      : '';
+    var html = '<div class="complaint">' +
+      '<div class="complaint-top">' +
+        '<div><div class="complaint-id">' + record.id + priorityBadge + '</div>' +
+        '<div class="complaint-meta">' + record.category + ' · ' + record.district + ', ' + esc(record.area) + ' · filed ' + date + '</div></div>' +
+        pillFor(record) +
+      '</div>' +
+      reporterLine +
+      '<p style="font-size:0.9rem;color:var(--ink-soft);margin:0.4rem 0 0;">' + esc(record.description) + '</p>' +
+      '<p class="complaint-meta" style="margin-top:0.6rem;">Assigned station: ' + record.station + ' · Aadhaar on file: XXXX XXXX ' + record.aadhaarLast4 + '</p>' +
+      sectionsLine +
+      '<div class="timeline">' + timelineFor(record) + '</div>';
+    if(withActions){
+      html += '<div style="margin-top:0.9rem;display:flex;gap:0.5rem;flex-wrap:wrap;">' + actionButtons(record) + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function esc(s){
+    var d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function actionButtons(record){
+    var stages = record.isCase ? CASE_STAGES : STAGES;
+    var buttons = "";
+    if(record.stageIndex < stages.length - 1){
+      buttons += '<button class="btn small" data-advance="' + record.id + '">Advance to: ' + stages[record.stageIndex+1] + '</button>';
+    }
+    if(!record.isCase && record.stageIndex < 3){
+      buttons += '<button class="btn small secondary" data-escalate="' + record.id + '">Escalate to formal case</button>';
+    }
+    if(buttons === ""){
+      buttons = '<span class="hint">No further action — this record is at its final stage.</span>';
+    }
+    return buttons;
+  }
+
+  function renderTrack(){
+    var wrap = document.getElementById("trackList");
+    if(complaints.length === 0){
+      wrap.innerHTML = '<div class="empty">Nothing filed yet in this browser. <br><button class="btn" style="margin-top:1rem;" data-goto="file">File your first complaint</button></div>';
+      wrap.querySelector("[data-goto]").addEventListener("click", function(){ goto("file"); });
+      return;
+    }
+    wrap.innerHTML = complaints.map(function(r){ return complaintCardHTML(r, false); }).join("");
+  }
+
+  document.getElementById("trackSearch").addEventListener("input", function(e){
+    var q = e.target.value.trim().toLowerCase();
+    var wrap = document.getElementById("trackList");
+    var filtered = q ? complaints.filter(function(r){ return r.id.toLowerCase().indexOf(q) !== -1; }) : complaints;
+    if(filtered.length === 0){
+      wrap.innerHTML = '<div class="empty">No complaint or case matches that number in this browser.</div>';
+      return;
+    }
+    wrap.innerHTML = filtered.map(function(r){ return complaintCardHTML(r, false); }).join("");
+  });
+
+  function renderOfficer(){
+    var wrap = document.getElementById("officerList");
+    if(complaints.length === 0){
+      wrap.innerHTML = '<div class="empty">The queue is empty. Complaints filed in the citizen view will appear here for an officer to act on.</div>';
+      return;
+    }
+    var open = complaints.filter(function(r){
+      var stages = r.isCase ? CASE_STAGES : STAGES;
+      return r.stageIndex < stages.length - 1;
+    });
+    var closed = complaints.filter(function(r){
+      var stages = r.isCase ? CASE_STAGES : STAGES;
+      return r.stageIndex >= stages.length - 1;
+    });
+
+    var html = "";
+    html += '<h3 style="font-size:1rem;margin-bottom:0.8rem;">Open (' + open.length + ')</h3>';
+    html += open.length ? open.map(function(r){ return complaintCardHTML(r, true); }).join("") : '<p class="hint" style="margin-bottom:1.5rem;">Nothing open right now.</p>';
+    html += '<h3 style="font-size:1rem;margin:1.8rem 0 0.8rem;">Closed (' + closed.length + ')</h3>';
+    html += closed.length ? closed.map(function(r){ return complaintCardHTML(r, true); }).join("") : '<p class="hint">Nothing closed yet.</p>';
+    wrap.innerHTML = html;
+
+    wrap.querySelectorAll("[data-advance]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var rec = complaints.find(function(r){ return r.id === btn.dataset.advance; });
+        if(!rec) return;
+        rec.stageIndex += 1;
+        var stages = rec.isCase ? CASE_STAGES : STAGES;
+        rec.log.push({ at: new Date().toISOString(), note: "Status moved to: " + stages[rec.stageIndex] + "." });
+        save(complaints);
+        showToast(rec.id + " moved to \u201c" + stages[rec.stageIndex] + "\u201d.");
+        renderOfficer();
+      });
+    });
+    wrap.querySelectorAll("[data-escalate]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var rec = complaints.find(function(r){ return r.id === btn.dataset.escalate; });
+        if(!rec) return;
+        rec.isCase = true;
+        rec.id = formatId(nextSeq(), rec.district, true);
+        rec.stageIndex = Math.min(rec.stageIndex, 2);
+        rec.log.push({ at: new Date().toISOString(), note: "Escalated to a formal case, numbered " + rec.id + ". Linked permanently to Aadhaar ending " + rec.aadhaarLast4 + "." });
+        save(complaints);
+        showToast("Escalated. New case number: " + rec.id);
+        renderOfficer();
+      });
+    });
+  }
+
+  // ---------- Dashboard ----------
+  function statCard(value, label){
+    return '<div class="card"><div style="font-family:\'Source Serif 4\',serif;font-size:2rem;font-weight:700;color:var(--maroon);">' + value + '</div>' +
+      '<div class="hint" style="margin-top:0.2rem;">' + label + '</div></div>';
+  }
+  function barRow(label, count, max){
+    var pct = max ? Math.round((count / max) * 100) : 0;
+    return '<div style="margin-bottom:0.75rem;">' +
+      '<div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:0.25rem;"><span>' + esc(label) + '</span><span class="hint">' + count + '</span></div>' +
+      '<div style="background:var(--paper-2);border-radius:4px;height:8px;overflow:hidden;"><div style="width:' + pct + '%;background:var(--gold);height:100%;"></div></div>' +
+      '</div>';
+  }
+  function renderDashboard(){
+    var total = complaints.length;
+    var cases = complaints.filter(function(r){ return r.isCase; }).length;
+    var resolved = complaints.filter(function(r){
+      var stages = r.isCase ? CASE_STAGES : STAGES;
+      return r.stageIndex >= stages.length - 1;
+    }).length;
+    var anon = complaints.filter(function(r){ return r.anonymous; }).length;
+
+    document.getElementById("dashStatCards").innerHTML =
+      statCard(total, "Total filed in this browser") +
+      statCard(cases, "Escalated to a formal case") +
+      statCard(resolved, "Resolved or closed") +
+      statCard(anon, "Filed anonymously");
+
+    var byCat = {};
+    complaints.forEach(function(r){ byCat[r.category] = (byCat[r.category]||0) + 1; });
+    var catEntries = Object.keys(byCat).map(function(k){ return [k, byCat[k]]; }).sort(function(a,b){ return b[1]-a[1]; });
+    var catMax = catEntries.length ? catEntries[0][1] : 0;
+    document.getElementById("dashByCategory").innerHTML = catEntries.length
+      ? catEntries.map(function(e){ return barRow(e[0], e[1], catMax); }).join("")
+      : '<p class="hint">No data yet — file a complaint to see it appear here.</p>';
+
+    var byDist = {};
+    complaints.forEach(function(r){ byDist[r.district] = (byDist[r.district]||0) + 1; });
+    var distEntries = Object.keys(byDist).map(function(k){ return [k, byDist[k]]; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,8);
+    var distMax = distEntries.length ? distEntries[0][1] : 0;
+    document.getElementById("dashByDistrict").innerHTML = distEntries.length
+      ? distEntries.map(function(e){ return barRow(e[0], e[1], distMax); }).join("")
+      : '<p class="hint">No data yet.</p>';
+  }
+
+  // ---------- Toast ----------
+  var toastTimer;
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+  }
+
+  // ---------- Chatbot ----------
+  var chatFab = document.getElementById("chatFab");
+  var chatPanel = document.getElementById("chatPanel");
+  var chatBody = document.getElementById("chatBody");
+  var chatForm = document.getElementById("chatForm");
+  var chatInput = document.getElementById("chatInput");
+  var chatStarted = false;
+
+  function openChat(){
+    chatPanel.classList.add("open");
+    chatPanel.setAttribute("aria-hidden", "false");
+    if(!chatStarted){
+      chatStarted = true;
+      addBotMessage("Hi, I'm Neethii. Tell me what happened, in your own words — I'll suggest which kind of complaint it sounds like, and you can file it straight from here.");
+    }
+    chatInput.focus();
+  }
+  function closeChat(){
+    chatPanel.classList.remove("open");
+    chatPanel.setAttribute("aria-hidden", "true");
+  }
+  chatFab.addEventListener("click", function(){
+    chatPanel.classList.contains("open") ? closeChat() : openChat();
+  });
+  document.getElementById("chatClose").addEventListener("click", closeChat);
+  document.getElementById("heroChatBtn").addEventListener("click", openChat);
+
+  function addUserMessage(text){
+    var d = document.createElement("div");
+    d.className = "msg user";
+    d.textContent = text;
+    chatBody.appendChild(d);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function addBotMessage(html, actions){
+    var d = document.createElement("div");
+    d.className = "msg bot";
+    d.innerHTML = html;
+    if(actions && actions.length){
+      var wrap = document.createElement("div");
+      wrap.className = "msg-actions";
+      actions.forEach(function(a){
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = a.label;
+        b.addEventListener("click", a.onClick);
+        wrap.appendChild(b);
+      });
+      d.appendChild(wrap);
+    }
+    chatBody.appendChild(d);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function showTyping(){
+    var d = document.createElement("div");
+    d.className = "msg bot typing";
+    d.id = "typingIndicator";
+    d.innerHTML = "<span></span><span></span><span></span>";
+    chatBody.appendChild(d);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function hideTyping(){
+    var t = document.getElementById("typingIndicator");
+    if(t) t.remove();
+  }
+
+  function matchCategory(text){
+    var lower = text.toLowerCase();
+    var best = null, bestScore = 0;
+    CATEGORIES.forEach(function(c){
+      var score = 0;
+      (c.keywords || []).forEach(function(k){ if(lower.indexOf(k) !== -1) score += 1; });
+      if(score > bestScore){ bestScore = score; best = c; }
+    });
+    return bestScore > 0 ? best : null;
+  }
+
+  function prefillFromChat(text, category){
+    var descField = document.getElementById("f-desc");
+    descField.value = text;
+    descField.dispatchEvent(new Event("input"));
+    if(category){
+      var chip = chipWrap.querySelector('[data-id="' + category.id + '"]');
+      if(chip) chip.click();
+    }
+    document.getElementById("chatPrefillNotice").style.display = "block";
+    closeChat();
+    goto("file");
+    setTimeout(function(){
+      var target = document.getElementById("f-name");
+      target.focus();
+      target.scrollIntoView({block:"center", behavior:"smooth"});
+    }, 60);
+  }
+
+  chatForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var text = chatInput.value.trim();
+    if(!text) return;
+    addUserMessage(text);
+    chatInput.value = "";
+    var lower = text.toLowerCase();
+
+    showTyping();
+    setTimeout(function(){
+      hideTyping();
+
+      if(/helpline|emergency|urgent|phone number|call/.test(lower)){
+        addBotMessage("For anything urgent right now, please call directly rather than typing here: <strong>100</strong> for police, <strong>181</strong> for women's safety, <strong>1930</strong> for cybercrime. This chat is only for preparing a complaint on this demo.");
+        return;
+      }
+      if(/track|status|my complaint|check my/.test(lower)){
+        addBotMessage("You can see every complaint filed in this browser, with its current status, on the Track page.", [
+          {label:"Open Track page", onClick:function(){ closeChat(); goto("track"); }}
+        ]);
+        return;
+      }
+      if(/aadhaar|adhar|aadhar/.test(lower)){
+        addBotMessage("Aadhaar is used here to link a complaint or case to you for the long term, the way a real lifetime case record would work. Only the last 4 digits are ever shown or stored in this demo — never the full number.");
+        return;
+      }
+
+      var cat = matchCategory(text);
+      if(cat){
+        var seriousNote = cat.serious ? " This kind of issue is often serious enough to go in directly as a formal case rather than a station-level complaint — you'll see that option on the form." : "";
+        var sectionsHtml = (cat.sections && cat.sections.length)
+          ? ('<div class="law-box" style="margin-top:0.7rem;"><h4>Sections often cited for this</h4>' +
+              cat.sections.map(function(s){ return '<div class="law-row"><span class="law-tag">' + s.law + ' ' + s.code + '</span><span>' + s.title + '</span></div>'; }).join("") +
+              '<p class="law-disclaimer">Illustrative only — the officer decides what actually applies once they have the facts.</p></div>')
+          : "";
+        addBotMessage("From what you've described, this sounds closest to <strong>" + cat.label + "</strong>." + seriousNote + sectionsHtml + " Want me to start the form with this filled in?", [
+          {label:"Yes, fill in the form", onClick:function(){ prefillFromChat(text, cat); }},
+          {label:"I'll pick the category myself", onClick:function(){ prefillFromChat(text, null); }}
+        ]);
+      }else{
+        addBotMessage("I couldn't clearly match that to one category — it might fit \u201cOther\u201d, or you know best which one it's closest to. Want me to start the complaint form with this description already in it?", [
+          {label:"Yes, start the form", onClick:function(){ prefillFromChat(text, null); }}
+        ]);
+      }
+    }, 550);
+  });
+
+  applyLang("en");
+  renderTrack();
+})();
+</script>
+</body>
+</html>
